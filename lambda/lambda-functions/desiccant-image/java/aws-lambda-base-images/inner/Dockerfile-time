@@ -1,0 +1,26 @@
+FROM ubuntu:20.04
+
+ADD 2e57fdc4d2eb514a7b4bf391585a3b0a1340523012196fb98935a3dbb1ceba44.tar.xz /
+ADD 3c22110311f758ebb7b55c84149ed39f9c65ef32180a99af05160466a53dd35d.tar.xz /
+ADD 587a087424dc431e6b09455d7e690e2661d2ced8639e394286a7102b07467127.tar.xz /
+#ADD c7b2c13b366af485737f5b69b15a45b4c4d5f7a2c13856523e3d227c63a462a4.tar.xz /
+ADD eef0dc61254fc7eeeb8b1566a54b2a1416c36a5b55c4f4bf5e76a12f0049ec8b.tar.xz /
+
+ADD ./j2re-image /zzm-jvm
+
+ENV LANG=en_US.UTF-8
+ENV TZ=:/etc/localtime
+ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin
+ENV LD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib
+ENV LAMBDA_TASK_ROOT=/var/task
+ENV LAMBDA_RUNTIME_DIR=/var/runtime
+
+WORKDIR /var/task
+ADD ./lambda-entrypoint.sh /lambda-entrypoint.sh
+COPY ./proxy /proxy
+COPY ./bootstrap /var/runtime/bootstrap
+COPY ./getpmap.sh /getpmap.sh
+COPY ./inner/time.jar /var/task
+
+ENTRYPOINT ["/lambda-entrypoint.sh"]
+CMD ["org.ipads.FunctionExecutorReclaim::handleRequest"]

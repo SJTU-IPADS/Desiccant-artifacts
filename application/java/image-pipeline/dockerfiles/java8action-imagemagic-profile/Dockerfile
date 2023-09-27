@@ -1,0 +1,6 @@
+from dplsming/java8action-profile:cmd
+
+RUN apt-get update \
+        && apt-get install -y imagemagick-6.q16
+
+#CMD ["java", "-Dfile.encoding=UTF-8", "-jar", "/javaAction/build/libs/javaAction-all.jar"]

@@ -1,0 +1,3 @@
+NAME=Corretto-RAPID
+VERSION=8-6458bc60
+LOGGING=amzn-stdout-tlv

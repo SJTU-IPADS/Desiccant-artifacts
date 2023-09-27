@@ -1,0 +1,3 @@
+FROM zzm-whisk/openwhisk-runner-nodejs:14-simlambda
+#CMD ["./node", "--trace-opt", "--trace-deopt", "--expose-gc", "--trace_gc_verbose", "--max-http-header-size", "81920", "--max-semi-space-size=12", "--max-old-space-size=231", "app.js", "nogc"]
+CMD ["./node", "--expose-gc", "--trace_gc_verbose", "--max-http-header-size", "81920", "--max-semi-space-size=12", "--max-old-space-size=231", "app.js", "nogc"]

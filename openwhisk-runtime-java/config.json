@@ -1,0 +1,14 @@
+{
+	"database": {
+		"host": "192.168.22.22",
+		"port": 15984,
+		"username": "whisk_admin",
+		"password": "some_passw0rd",
+		"dbname": "images"
+	},
+	"redis": {
+		"host": "192.168.22.22",
+		"port": 6379
+	}
+}
+

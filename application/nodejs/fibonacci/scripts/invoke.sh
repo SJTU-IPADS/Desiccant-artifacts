@@ -1,0 +1,1 @@
+wsk -i action invoke fibonacci --result --param n 1000

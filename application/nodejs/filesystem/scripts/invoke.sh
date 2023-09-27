@@ -1,0 +1,1 @@
+wsk -i action invoke filesystem --result

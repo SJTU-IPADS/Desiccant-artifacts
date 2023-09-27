@@ -1,0 +1,318 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /* - Scalafmt Toolage -*/
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "cz.alenkacz:gradle-scalafmt:${gradle.scalafmt.version}"
+  }
+}
+
+plugins {
+    id 'com.github.blindpirate.gogradle' version '0.10'
+}
+
+subprojects {
+  apply plugin: 'scalafmt'
+  scalafmt.configFilePath = gradle.scalafmt.config
+}
+
+golang {
+    packagePath = 'github.com/apache/openwhisk-cli' as String
+    buildTags = (rootProject.findProperty('goTags')?:'').split(',')
+    goVersion = '1.9.3'
+}
+
+dependencies {
+    golang {
+        // BEGIN - Imported from Godeps
+        build(['name':'github.com/cloudfoundry/jibber_jabber', 'version':'bcc4c8345a21301bf47c032ff42dd1aae2fe3027', 'transitive':false])
+        build(['name':'github.com/fatih/color', 'version':'570b54cabe6b8eb0bc2dfce68d964677d63b5260', 'transitive':false])
+        build(['name':'github.com/google/go-querystring/query', 'version':'9235644dd9e52eeae6fa48efd539fdc351a0af53', 'transitive':false])
+        build(['name':'github.com/hokaccha/go-prettyjson', 'version':'f75235bd99dad4e98ff360db8372d5c0ef1d054a', 'transitive':false])
+        build(['name':'github.com/inconshreveable/mousetrap', 'version':'76626ae9c91c4f2a10f34cad8ce83ea42c93bb75', 'transitive':false])
+        build(['name':'github.com/mattn/go-colorable', 'version':'d228849504861217f796da67fae4f6e347643f15', 'transitive':false])
+        build(['name':'github.com/mattn/go-isatty', 'version':'a5cdd64afdee435007ee3e9f6ed4684af949d568', 'transitive':false])
+        build(['name':'github.com/mitchellh/go-homedir', 'version':'1111e456ffea841564ac0fa5f69c26ef44dafec9', 'transitive':false])
+        build(['name':'github.com/nicksnyder/go-i18n/i18n/...', 'version':'991e81cc94f6c54209edb3192cb98e3995ad71c1', 'transitive':false])
+        build(['name':'github.com/spf13/cobra', 'version':'1238ba19d24b0b9ceee2094e1cb31947d45c3e86', 'transitive':false])
+        build(['name':'github.com/spf13/pflag', 'version':'367864438f1b1a3c7db4da06a2f55b144e6784e0', 'transitive':false])
+        build(['name':'golang.org/x/sys/unix', 'version':'7f918dd405547ecb864d14a8ecbbfe205b5f930f', 'transitive':false])
+        build(['name':'gopkg.in/yaml.v2', 'version':'eb3733d160e74a9c7e442f435eb3bea458e1d19f', 'transitive':false])
+        build(['name':'github.com/ghodss/yaml', 'version':'0ca9ea5df5451ffdf184b4428c902747c2c11cd7', 'transitive':false])
+        build(['name':'github.com/apache/openwhisk-client-go/whisk','version':'d8ccb1442651beee6a9245913e3ca0cb182888b1','transitive':false])
+        build(['name':'github.com/apache/openwhisk-wskdeploy','version':'cbe7c52d99c1ead5172946d3aeb33adb5d5c40b2','transitive':false])
+        // END - Imported from Godeps
+        test name:'github.com/stretchr/testify', version:'b91bfb9ebec76498946beb6af7c0230c7cc7ba6c', transitive:false //, tag: 'v1.2.0'
+        test name:'github.com/spf13/viper', version:'aafc9e6bc7b7bb53ddaa75a5ef49a17d6e654be5', transitive:false
+        test name:'github.com/cpuguy83/go-md2man/md2man', version:'1d903dcb749992f3741d744c0f8376b4bd7eb3e1', transitive:false //, tag:'v1.0.7'
+        test name:'github.com/davecgh/go-spew/spew', version:'346938d642f2ec3594ed81d874461961cd0faa76', transitive:false //, tag:'v1.1.0'
+        test name:'github.com/pmezard/go-difflib/difflib', version:'792786c7400a136282c1664665ae0a8db921c6c2', transitive:false
+
+        test name:'github.com/onsi/ginkgo', version:'00054c0bb96fc880d4e0be1b90937fad438c5290', transitive: false
+        test name:'github.com/hpcloud/tail',version: 'a1dbeea552b7c8df4b542c66073e393de198a800', transitive: false
+        test name:'gopkg.in/tomb.v1', version:'c131134a1947e9afd9cecfe11f4c6dff0732ae58', transitive: false
+        test name:'gopkg.in/fsnotify/fsnotify.v1', version:'7be54206639f256967dd82fa767397ba5f8f48f5', transitive: false
+        test name:'github.com/onsi/gomega', version:'c893efa28eb45626cdaa76c9f653b62488858837', transitive: false
+        test name:'golang.org/x/net/html', version:'b68f30494add4df6bd8ef5e82803f308e7f7c59c', transitive: false
+        test name:'golang.org/x/text', version:'ece95c760240037f89ebcbdd7155ac8cb52e38fa', transitive: false
+    }
+}
+
+/*
+    The OpenWhiskPlatform class is a utility class to make the rest of what
+    happens with platforms a bit more understandable.  A "Platform" is a tuple
+    of an operating system and a processor.  Currently, the OpenWhisk CLI
+    supports three OS's:  Linux, Mac/Darwin, and Windows.  It supports x86
+    (32-bit or 64-bit) on all OS's.  On Linux, it also support System Z (s390x),
+    PowerPC (ppc64le), and ARM (32-bit and 64-bit) architectures.
+
+    Different contexts use different codings to refer to these architectures --
+    the class attempts to provide and interpret all needed codings.  Internal
+    storage is in "GO" format:
+
+        OS: linux, darwin, windows
+        Arch: 386, amd64, s390x, ppc64le, arm
+
+    TODO - It may be appropriate to refactor into a general purpose Platform
+           class for all builds, then to extend with specifics needed for
+           the OpenWhisk CLI build.
+ */
+class OpenWhiskPlatform {
+    String goOs
+    String goArch
+
+    /*
+        The 'zipFileName' property is the root file name to use for archives.
+     */
+    static String zipFileName
+
+    /*
+        Create a platform for the local platform
+     */
+    OpenWhiskPlatform() {
+        this(System.properties['os.name'], System.properties['os.arch'])
+    }
+
+    OpenWhiskPlatform(String platformSpec) {
+        this(*platformSpec.split('-'))
+    }
+
+    OpenWhiskPlatform(String inOs, String inArch) {
+        goOs=inOs.toLowerCase()
+                 .replaceAll(~/^mac.*$/,'darwin')
+                 .replaceAll(~/^.*n[ui]x.*$/,'linux')
+        goArch=inArch.toLowerCase()
+                     .replaceAll('x86_64','amd64')
+                     .replaceAll('i386','386')
+                     .replaceAll('x86_32','386')
+    }
+
+    /**
+     * Return the Openwhisk OS for this Platform
+     */
+    String getOwOs() {
+        ((goOs == 'darwin') ? 'mac' : goOs)
+    }
+
+    String getGoPlatform() {
+        "${goOs}-${goArch}"
+    }
+
+    /*
+        Everything below here is specific to the CLI build and could be
+        factored out into a subclass.
+     */
+    String getArchiveDirName() {
+        "${this.owOs}/${goArch}"
+    }
+
+    String getArchiveFileName() {
+        String suffix
+        switch (goArch) {
+            case "386": suffix = '-32bit'; break;
+            case "amd64": suffix = ''; break;
+            default: suffix = "-${goArch}"; break;
+        }
+        String archivetype = (goOs == 'linux') ? 'tgz' : 'zip'
+        "${zipFileName}-${this.owOs}${suffix}.${archivetype}"
+    }
+}
+
+/*
+    Configuration of OpenWhisk Platform behavior based on environment and defaults
+ */
+OpenWhiskPlatform.zipFileName =
+    System.env['zip_file_name'] ?:
+        (rootProject.findProperty('zipFileName') ?: 'OpenWhisk_CLI')
+
+project.ext.packageVersion =
+        rootProject.findProperty('packageVersion') ?: 'latest'
+
+project.ext.cliBuildLocation =
+        rootProject.findProperty('cliBuildLocation') ?: './build'
+
+project.ext.cliReleaseLocation =
+        rootProject.findProperty('cliReleaseLocation') ?: './release'
+
+String buildFileName = System.env['build_file_name'] ?:
+        (rootProject.findProperty('buildFileName') ?: 'wsk')
+
+/*
+    'platforms' property will be null for a local compile, or a list (comma or
+    space-separated) of hyphenated Goos-Goarch pairs.  Some transformation is
+    done when parsing to handle misconceptions.
+
+    TODO:  More syntax/validity checking and feedback, perhaps as part of a
+    Platform object as proposed above...
+*/
+rootProject.ext.localPlatform = new OpenWhiskPlatform()
+
+if (rootProject.hasProperty('buildPlatforms')) {
+    rootProject.ext.platforms = buildPlatforms.tokenize(' ,').collect {
+        new OpenWhiskPlatform(it)
+    }
+} else {
+    if (!rootProject.hasProperty('nativeCompile')) {
+        rootProject.ext.platforms = [
+            'linux-386', 'linux-amd64',
+            'linux-s390x', 'linux-ppc64le', 'linux-arm', 'linux-arm64',
+            'darwin-386', 'darwin-amd64',
+            'windows-386', 'windows-amd64'
+        ].collect { new OpenWhiskPlatform(it) }
+    } else {
+        rootProject.ext.platforms = [ rootProject.localPlatform ]
+    }
+}
+
+/*
+    I18n support
+ */
+task getGoI18n(type: com.github.blindpirate.gogradle.Go) {
+    go 'get -u github.com/jteeuwen/go-bindata/...'
+}
+
+task goI18n(type: com.github.blindpirate.gogradle.Go, dependsOn: getGoI18n) {
+    // WARNING:  The single quotes are intentional!  The gogradle plugin will
+    //           parse the command with the GString engine at execution time.
+    run '${GOPATH}/bin/go-bindata -pkg wski18n -o wski18n/i18n_resources.go wski18n/resources'
+}
+resolveBuildDependencies.dependsOn(goI18n)
+
+/*
+    Checks -- add golint and scancode to the checks run prior to build.
+       The get step is needed to be sure a golint binary is available to run.
+ */
+task getGoLint(type: com.github.blindpirate.gogradle.Go) {
+    go 'get -u golang.org/x/lint/golint'
+}
+
+task goLint(type: com.github.blindpirate.gogradle.Go, dependsOn: getGoLint) {
+    // WARNING:  The single quotes are intentional!  The gogradle plugin will
+    //           parse the command with the GString engine at execution time.
+    run '${GOPATH}/bin/golint ' + golang.packagePath
+}
+
+goCheck.dependsOn(goLint)
+
+goBuild {
+    targetPlatform = rootProject.platforms*.goPlatform
+    def now = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+
+    // WARNING:  The single quotes are intentional!  The gogradle plugin will
+    //           parse the command with the GString engine at execution time.
+    go(['build',
+      '-ldflags', "-X main.CLI_BUILD_TIME=${now}" as String,
+      '-o', cliBuildLocation+'/${GOOS}-${GOARCH}/'+buildFileName+'${GOEXE}',
+      golang.packagePath ] as List<String>)
+}
+
+gofmt {
+    gofmt "-s -w ."
+}
+
+task compile(type: Copy, dependsOn: goBuild) {
+    destinationDir = file(cliBuildLocation)
+    from("${cliBuildLocation}/${rootProject.localPlatform.goOs}-${rootProject.localPlatform.goArch}")
+}
+
+task build(type: DefaultTask, dependsOn: compile)
+
+/*
+    For each platform, create an individual archive in a platform appropriate
+    format (tarball for Linux, zipfile for Mac & Windows).
+ */
+task individualArchives(
+    dependsOn: rootProject.platforms.collect() { p ->
+        task("release${p.goOs.capitalize()}${p.goArch.capitalize()}",
+            type: (p.goOs == 'linux') ? Tar : Zip, dependsOn: compile) {
+                if (p.goOs == 'linux') { compression = Compression.GZIP }
+                destinationDir = file(cliReleaseLocation)
+                baseName = "${p.zipFileName}-${packageVersion}-${p.owOs}-${p.goArch}"
+                from("${cliBuildLocation}/${p.goOs}-${p.goArch}/") {
+                    include "${buildFileName}*"
+                }
+                from("./") {
+                    include "LICENSE.txt", "NOTICE.txt", "README.md"
+                    exclude "wski18n"
+                }
+            }
+    })
+
+/*
+    Create a 'content.json' file representing all that was
+    compiled and its appropriate directory in the Tarball that will be created
+    for deployment to local Nginx instances.
+ */
+
+task index() {
+    def content = [:]
+    for (p in platforms) {
+        def pathObject = [ "path" : "${p.archiveDirName}/${p.archiveFileName}" ]
+        content.get(p.owOs,[:])[p.goArch] = pathObject
+        // TODO: Default architecture should be configurable as a property
+        if (p.goArch == 'amd64') {
+            content.get(p.owOs,[:])['default'] = pathObject
+        }
+    }
+
+    doLast {
+        mkdir(cliBuildLocation)
+        file("${cliBuildLocation}/content.json").text = groovy.json.JsonOutput.toJson(["cli": content])
+    }
+}
+
+task releaseBinaries(type: Tar, dependsOn: [individualArchives, index]) {
+    compression = Compression.GZIP
+    destinationDir = file(cliReleaseLocation)
+    baseName = "${OpenWhiskPlatform.zipFileName}-${packageVersion}-all"
+    from("${cliBuildLocation}/content.json") { into('.') }
+    rootProject.platforms.each() { p ->
+        from(cliReleaseLocation) {
+            include("${p.zipFileName}-${packageVersion}-${p.owOs}-${p.goArch}.*")
+            into p.archiveDirName
+            rename { p.archiveFileName }
+        }
+    }
+}
+
+task clean(type: Delete, dependsOn: goClean) {
+    delete cliBuildLocation, cliReleaseLocation
+}

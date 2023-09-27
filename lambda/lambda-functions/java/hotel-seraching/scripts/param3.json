@@ -1,0 +1,37 @@
+{
+  "mainClass": "com.example.SearchResultFunc",
+  "args": {
+    "Rates": [
+      {
+        "Code": "RACK",
+        "InDate": "2020-02-28",
+        "OutDate": "2020-02-29",
+        "RoomType": {
+          "BookableRate": 139.0,
+          "Code": "QN",
+          "RoomDescription": "Queen sized bed",
+          "TotalRate": 139.0,
+          "TotalRateInclusive": 153.09
+        },
+        "_id": "2",
+        "_rev": "1-aaa34a4c4c98e4a4af84dbe141cfa3ab"
+      },
+      {
+        "Code": "RACK",
+        "InDate": "2020-02-28",
+        "OutDate": "2020-02-29",
+        "RoomType": {
+          "BookableRate": 109.0,
+          "Code": "KNG",
+          "RoomDescription": "King sized bed",
+          "TotalRate": 109.0,
+          "TotalRateInclusive": 123.17
+        },
+        "_id": "3",
+        "_rev": "1-9b14198b3af11ed6df70f831d843131d"
+      }
+    ],
+    "Status": "OK",
+    "thread": 1
+  }
+}

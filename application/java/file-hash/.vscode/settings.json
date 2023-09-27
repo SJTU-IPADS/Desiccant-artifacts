@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "clang-format.executable": "/home/cxj/.clang-format",
+    "java.configuration.updateBuildConfiguration": "automatic"
+}

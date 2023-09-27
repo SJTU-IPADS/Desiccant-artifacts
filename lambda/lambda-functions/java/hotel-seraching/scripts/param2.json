@@ -1,0 +1,11 @@
+{
+  "mainClass": "com.example.GetRatesFunc",
+  "args": {
+    "Ids": [
+      "2",
+      "3"
+    ],
+    "Status": "OK",
+    "thread": 1
+  }
+}

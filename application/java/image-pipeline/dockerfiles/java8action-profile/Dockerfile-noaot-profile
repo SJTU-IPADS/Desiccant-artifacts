@@ -1,0 +1,3 @@
+from dplsming/java8action-profile:nocmd
+
+CMD ["java-profile-wrapper.sh", "-Dfile.encoding=UTF-8", "-jar", "/javaAction/build/libs/javaAction-all.jar"]

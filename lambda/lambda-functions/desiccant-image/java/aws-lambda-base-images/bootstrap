@@ -1,0 +1,2 @@
+#!/bin/bash
+/zzm-jvm/bin/java -XX:MaxHeapSize=222823k -XX:MaxMetaspaceSize=26214k -XX:ReservedCodeCacheSize=13107k -XX:-TieredCompilation -XX:+UseSerialGC -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 -cp /var/task/* com.amazonaws.services.lambda.runtime.api.client.AWSLambda org.ipads.FunctionExecutorReclaim::handleRequest

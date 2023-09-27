@@ -1,0 +1,74 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+compileTestScala.options.encoding = 'UTF-8'
+
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+tasks.withType(Test) {
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+    outputs.upToDateWhen { false } // force tests to run every time
+}
+
+task testWithoutCredentials(type: Test) {
+    exclude 'packages/watson/**'
+    exclude 'packages/slack/**'
+    exclude 'packages/weather/**'
+}
+
+dependencies {
+    compile "org.scala-lang:scala-library:${gradle.scala.version}"
+    compile "org.apache.openwhisk:openwhisk-tests:${gradle.openwhisk.version}:tests"
+    compile "org.apache.openwhisk:openwhisk-tests:${gradle.openwhisk.version}:test-sources"
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = gradle.scala.compileFlags
+}
+
+
+def keystorePath = new File(sourceSets.test.scala.outputDir, 'keystore')
+task deleteKeystore(type: Delete) {
+    delete keystorePath
+}
+
+task createKeystore(dependsOn: deleteKeystore) {
+    doLast {
+        Properties props = new Properties()
+        def owPath = System.getenv("OPENWHISK_HOME") ?: '../openwhisk'
+        props.load(new FileInputStream(file(owPath + '/whisk.properties')))
+        keystorePath.parentFile.mkdirs()
+        def cmd = ['keytool', '-import', '-alias', 'Whisk', '-noprompt', '-trustcacerts', '-file', file(props['whisk.ssl.cert']), '-keystore', keystorePath, '-storepass', 'openwhisk']
+        cmd.execute().waitForProcessOutput(System.out, System.err)
+    }
+}
+
+afterEvaluate {
+    tasks.withType(Test) {
+        dependsOn createKeystore
+    }
+}
