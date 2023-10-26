@@ -26,7 +26,7 @@ for i in range(len(chained_apps)):
     chain_cnt = chained_apps_cnt[i]
     total_results = [0,0]
     for j in range(chain_cnt):
-        cur_result = get_uss_for_app("%s-%d" %(app_name, chain_cnt))
+        cur_result = get_uss_for_app("%s-%d" %(app_name, j))
         total_results[0] += cur_result[0]
         total_results[1] += cur_result[1]
     print("%s,%.2f,%.2f" %(app_name, total_results[0]/1024.0, total_results[1]/1024.0))

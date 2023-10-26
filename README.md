@@ -99,34 +99,7 @@ Use the following command in the ```scripts``` directory to fix some split files
 
 ```
 
-### 3.3 Build OpenWhisk
-
-The OpenWhisk framework mainly consists of three parts: the framework container images (openwhisk), the command line client (openwhisk-cli), and the external pmap server (pmap-server). Use the following commands to build them in the ```scripts``` directory:
-
-```shell
-./build-openwhisk.sh
-./build-openwhisk-cli.sh
-./build-pmap-server.sh
-```
-
-### 3.4 Build Function Executor
-
-The OpenWhisk framework requires a specific Docker image (Function Executor) for each language, which includes the language runtime and a small HTTP server for communication with the OpenWhisk framework.Use the following commands to build the function executor for Java and JavaScript in the ```scripts``` folder:
-
-```shell
-./build-java-runtime.sh
-./build-nodejs-runtime.sh
-```
-
-### 3.5 Build Applications
-
-All FaaS applications for OpenWhisk are located in the ```application``` directory. To build them, use the following command in the ```script``` directory. The ```<IP_ADDR>``` the externally accessible IP address of the current machine (e.g., 192.168.1.101). The script will replace the ip address of databases in the applications with the provided IP_ADDR subsequently access the databases in containers.
-
-```shell
-./build-apps.sh <IP_ADDR>
-```
-
-### 3.6 Reconfigure CPU Binding
+### 3.3 Reconfigure CPU Binding
 
 The archive is tested on a 40-core machine, and the cores are divided into two sets to prevent interference.
 
@@ -148,6 +121,47 @@ The archive is tested on a 40-core machine, and the cores are divided into two s
   ```
 
 To run the experiments in another hardware environment, please manually change the CPU binding to a different configuration.
+
+### 3.4 Build OpenWhisk
+
+The OpenWhisk framework mainly consists of three parts: the framework container images (openwhisk), the command line client (openwhisk-cli), and the external pmap server (pmap-server). Use the following commands to build them in the ```scripts``` directory:
+
+```shell
+./build-openwhisk.sh
+./build-openwhisk-cli.sh
+./build-pmap-server.sh
+```
+
+Note that after each reconfiguration of CPU bindings, please rebuild the OpenWhisk framework using the following command in the in the ```scripts``` directory:
+
+```shell
+./build-openwhisk.sh
+```
+
+### 3.5 Build Function Executor
+
+The OpenWhisk framework requires a specific Docker image (Function Executor) for each language, which includes the language runtime and a small HTTP server for communication with the OpenWhisk framework.Use the following commands to build the function executor for Java and JavaScript in the ```scripts``` folder:
+
+```shell
+./build-java-runtime.sh
+./build-nodejs-runtime.sh
+```
+
+### 3.6 Build Applications
+
+All FaaS applications for OpenWhisk are located in the ```application``` directory. To build them, use the following command in the ```script``` directory. The ```<IP_ADDR>``` the externally accessible IP address of the current machine (e.g., 192.168.1.101). The script will replace the ip address of databases in the applications with the provided IP_ADDR subsequently access the databases in containers.
+
+```shell
+./build-apps.sh <IP_ADDR>
+```
+
+### 3.7 Set up OpenWhisk Execution Environment
+
+The docker-compose files required to launch the OpenWhisk framework are located in the ```openwhisk-docker-compose``` directory. Before starting the OpenWhisk framework for the first time, please execute the following command in the ```openwhisk-docker-compose``` directory to download and prepare the necessary requried files.
+
+```shell
+make download-src download-cli docker-pull
+```
 
 ## 4. Test on OpenWhisk
 
@@ -201,7 +215,7 @@ To manually trigger memory reclamation with Desiccant's support, use the followi
 wsk action invoke ZZMReclaimAll -i --result; sleep 2
 ```
 
-You can use the ```pmap``` command to check the memory consumption of the main process in the Docker container and observe the changes in memory consumption before/after the reclaim operation. For more complex experiments, please refer to Section 4.2.
+You can use the ```pmap``` command to check the memory consumption of the main process in the Docker container and observe the changes in memory consumption (specifically, uss, which is the sum of private clean and private dirty as described in the paper) before/after the reclaim operation. For more complex experiments, please refer to Section 4.2.
 
 ### 4.2 Run Experiments
 
