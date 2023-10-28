@@ -1,6 +1,9 @@
 def get_uss_from_pmap(pmap_dir, cnt):
     pmap_f = open("%s/pmap-%d.txt" % (pmap_dir, cnt))
     pmap_lines = pmap_f.readlines()
+    if len(pmap_lines) == 0:
+        print("Warning: %s data is None, please check it." % pmap_dir)
+        return 0
     total_private_clean = int(pmap_lines[-1][:-1].split()[7])
     total_private_dirty = int(pmap_lines[-1][:-1].split()[8])
     return (total_private_clean + total_private_dirty) / 1024.0
