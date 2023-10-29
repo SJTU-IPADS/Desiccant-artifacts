@@ -17,6 +17,7 @@ sed -i '1s/.*/'"$replacement"'/' alexa/scripts/local.env
 sed -i '1s/.*/'"$replacement"'/' data-analysis/scripts/local.env
 param="{\"url\":\"http://whisk_admin:some_passw0rd@$1:5984\",\"username\":\"whisk_admin\",\"host\":\"$1\",\"dbname\":\"wage\",\"id\":\"id100\",\"password\":\"some_passw0rd\"}"
 echo $param > data-analysis/data-analysis-param.json
+echo $param > data-analysis/scripts/param.json
 
 cd $APP_ROOT_DIR
 

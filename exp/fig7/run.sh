@@ -51,6 +51,7 @@ run_single_app() {
     sleep 3
     sudo pmap -XX $RUNTIME_PID > result/$2-$3/pmap-$1.txt
   fi
+  sleep 5
   wsk action invoke ZZMRemoveAll -i --result
 }
 
@@ -120,6 +121,7 @@ run_chain_app() {
       j=$((j+1))
     done
   fi
+  sleep 5
   wsk action invoke ZZMRemoveAll -i --result
 
 }
