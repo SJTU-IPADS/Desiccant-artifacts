@@ -107,6 +107,7 @@ The archive is tested on a 40-core machine, and the cores are divided into two s
   
   ```shell
   pamp-server-c/run.sh
+  pamp-server-c/start.sh
   openwhisk-docker-compose/docker-compose-desiccant.yml
   openwhisk-docker-compose/docker-compose-vanilla.yml
   exp/fig9,10/inner/run-azure-test.py (line9)
