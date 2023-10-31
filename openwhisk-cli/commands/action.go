@@ -200,11 +200,14 @@ func invokeAction(
 	result bool) (map[string]interface{}, error) {
 	// TODO remove all global modifiers
 	Client.Namespace = qualifiedName.GetNamespace()
+	t0 := time.Now().UnixNano()
 	res, _, err := Client.Actions.Invoke(
 		qualifiedName.GetEntityName(),
 		parameters,
 		blocking,
 		result)
+	t1 := time.Now().UnixNano()
+	fmt.Fprintf(os.Stdout, "[zzm] time\t%d\tns\n", t1 - t0)
 	return res, err
 }
 
