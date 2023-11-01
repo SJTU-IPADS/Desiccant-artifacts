@@ -91,10 +91,17 @@ sudo dpkg-reconfigure dash
 
 ### 3.2 Fix Files
 
+Before starting, please download the code repository:
+
+```shell
+git clone https://github.com/SJTU-IPADS/Desiccant-artifacts.git && cd Desiccant-artifacts
+```
+
 Use the following command in the ```scripts``` directory to fix some split files by merging them together:
 
 
 ```shell
+cd scripts
 ./fix-files.sh
 
 ```
@@ -105,6 +112,8 @@ The archive is tested on a 40-core machine, and the cores are divided into two s
 
 - cpu-set-1 (0-19): CPUs used to run the OpenWhisk framework and the necessary experiment scripts, which are present in the following files:
   
+> Note: Please modify the cpuset values in these files instead of running these files.
+
   ```shell
   pamp-server-c/run.sh
   pamp-server-c/start.sh
