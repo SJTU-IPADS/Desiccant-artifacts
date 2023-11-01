@@ -52,9 +52,10 @@ execute_trace() {
   tail -n +$trunc_cnt ~/tmp/openwhisk/invoker/logs/invoker-local_logs.log  | grep evaluation > ./result/coldrate.log
   tail -n +$trunc_cnt ~/tmp/openwhisk/invoker/logs/invoker-local_logs.log  | grep evict > ./result/evict.log
   tail -n +$trunc_cnt ~/tmp/openwhisk/invoker/logs/invoker-local_logs.log  > ./result/invoker.log
-  cp ~/tmp/openwhisk/invoker/logs/invoker-local_logs.log ./result
-  mv ./cpu.txt ./result
+  cp ~/tmp/openwhisk/invoker/logs/invoker-local_logs.log ./result/
+  mv ./cpu.txt ./result/cpu.txt
   killall wsk
+  rm -rf ./$1/result-$2
   mv ./result ./$1/result-$2
   cd $CUR_DIR
 }
